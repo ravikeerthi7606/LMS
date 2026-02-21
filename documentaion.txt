@@ -1,0 +1,58 @@
+Project Documentation
+
+
+
+home page-general info
+	 -login for students and lecturers
+
+Lecturer page-authentication
+	     -upload images and videos
+	     -revenue
+	     -personalised one-on-one tutor
+	     -rating 
+	     
+students page-purchase
+	     -watch videos without lagging
+	     -add to chart
+
+
+
+Let's create poc for this web application.
+no cost application 
+For frontend, use React.js
+For backend, use fast api
+For storage, use MongoDB and also scalable to cloud services.
+
+home page-general info about the web 
+	              -login for students and lecturers
+                  -signup
+
+Lecturer page
+	     -upload images and videos
+	     -revenue
+	     -rating 
+	     
+students page
+         -purchase
+	     -watch videos without lagging
+	     -add to chart
+
+home-page: when i open the web, it redirect to the home page that have general information.
+in top-right corner, create log-in and signup.
+
+lecturer-page :if i click lecturer login, it redirect to the lecturer page after authentication that have features .when i upload video, it should be in students page.
+it have like revenue that this many students have purchased ur course.
+also rating of the course
+
+student-page : if i click student login, it redirect to the student page after authentication that have features. i should purchase this course before watching the video .i should able to watch video without lag.
+
+add features of ur opinion
+add cool ui and ux design to make it as professional website
+**i should show it to my client**
+
+
+
+
+
+
+
