@@ -1,18 +1,19 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
-function Dashboard() {
-  return <h2 style={{ textAlign: "center" }}>Welcome to LMS Dashboard</h2>;
-}
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 
