@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService";
+import { registerUser } from "../services/authService";
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
+    role: "student",
   });
   const [error, setError] = useState("");
 
@@ -18,22 +20,31 @@ function Login() {
     e.preventDefault();
 
     try {
-      const { data } = await loginUser(form);
-      localStorage.setItem("token", data.access_token);
-      navigate("/dashboard");
+      await registerUser(form);
+      navigate("/");
     } catch (err) {
-      setError("Invalid email or password");
+      setError("Registration failed");
     }
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>LMS Login</h2>
+        <h2 style={styles.title}>Create Account</h2>
 
         {error && <p style={styles.error}>{error}</p>}
 
         <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={form.name}
+            onChange={handleChange}
+            style={styles.input}
+            required
+          />
+
           <input
             type="email"
             name="email"
@@ -54,13 +65,29 @@ function Login() {
             required
           />
 
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            style={styles.input}
+          >
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+          </select>
+
           <button type="submit" style={styles.button}>
-            Sign In
+            Sign Up
           </button>
         </form>
 
         <p style={styles.footer}>
-          Don’t have an account? <span style={styles.link} onClick={() => navigate("/register")}>Register</span>
+          Already have an account?{" "}
+          <span
+            style={styles.link}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </span>
         </p>
       </div>
     </div>
@@ -119,4 +146,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default Register;
