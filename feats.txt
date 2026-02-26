@@ -1,0 +1,88 @@
+login	
+	-login  -verifying credentials in backend -sends a jwt that can be customised -frontend stores token - backend validates and allows access
+		-change password
+	-sign in
+		-authentication -otp based / social login
+		-promo codes or offers app
+	-teacher authentication
+	
+
+control panel
+	-help
+	-delete account
+	-payment details/subscription details
+	-UI customization
+
+home page
+	-show recommendations
+	-show trend
+
+dedicated page for customer based on role
+	 -> teacher/uploader
+		-upload
+			-videos - firebase storage -meatadata in firestore -created a secured url
+			-course materials
+			-doubt viewing -ticket assigned (teacher is notified) -status updated -ticket closed (analogy like ticket tracking) 
+			-doubt clarification - public or private ticket (assigned or modified by teacher)
+			-video categorisation(tagging for search)
+		-profile
+			-their videos
+			-schedules
+			-domains
+			-current working video
+			-online available time
+			-reviews 
+			-ratings (based on)
+				-videos count and frequency
+				-doubt clearance rate and wait time
+		-social page
+		-live doubt/class sessions
+		-view
+			-how many views
+
+		-student details(who watches)
+		-assignment/tests upload
+			-uploads questions and answers
+			-gets reviews and marks of the test
+			-upload solutions
+		-payment page(contains to pay options and shows transaction data)
+			-to pay to the site 
+			-earned by selling
+		-preview upload	
+		-assign offer suggestions
+			-based on views
+		-notify current trend /notify teacher that their domain is trending 
+		-certification
+			-options to customize predetermined templates
+	 -> student
+		-search
+			-auto complete search /suggestions
+		-view preview
+		-view videos -request video -backend verifies payment -firebase generates signed url -played in a html5/video.js player
+			-security
+		-get course materials
+		-view live
+			-interact
+			-comment
+		-pay
+		-doubts -ticket generated 
+			-notifications if cleared
+		-common review or doubts (public or private ticket assigned by student)
+			-anyone can answer course related teachers can verify the answers
+			notifications if cleared
+		-recommended course
+			-based on viewed tags, search history 
+			-courses available in offers
+			-trending courses
+		-upload reviews
+		-follow teachers/program provider
+			-receive notifications
+			-view social page
+		-dedicated progress page
+			-watch hours
+		-take tests /assignments
+			-view results
+			-view solutions
+			-views others performance(general/cumulative)
+		-certification
+			-if completed notified to teacher -then certificate is provided

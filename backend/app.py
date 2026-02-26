@@ -79,6 +79,52 @@ def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": f"Welcome {current_user}"}), 200
 
+@app.route('/api/home', methods=['GET'])
+def home():
+    # Trending = top by views
+    trending = list(
+        mongo.db.courses.find()
+        .sort("views", -1)
+        .limit(5)
+    )
+
+    # Offers
+    offers = list(
+        mongo.db.courses.find({"is_offer": True})
+        .limit(5)
+    )
+
+    # Convert ObjectId
+    for course in trending + offers:
+        course["_id"] = str(course["_id"])
+
+    return jsonify({
+        "trending_courses": trending,
+        "offers": offers
+    }), 200
+
+
+@app.route('/api/home/personalized', methods=['GET'])
+@jwt_required()
+def personalized_home():
+    user_email = get_jwt_identity()
+
+    user = mongo.db.users.find_one({"email": user_email})
+
+    user_tags = user.get("interests", [])
+
+    recommended = list(
+        mongo.db.courses.find({"tags": {"$in": user_tags}})
+        .limit(5)
+    )
+
+    for course in recommended:
+        course["_id"] = str(course["_id"])
+
+    return jsonify({
+        "recommended_courses": recommended
+    }), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)

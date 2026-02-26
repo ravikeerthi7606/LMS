@@ -1,277 +1,183 @@
-# 🎓 LMS Web Application
+# EduFlow LMS
 
-A full-stack Learning Management System (LMS) built using:
-
-- 🔹 Frontend: React (Vite)
-- 🔹 Backend: Flask (REST API)
-- 🔹 Database: MongoDB
-- 🔹 Authentication: JWT (JSON Web Token)
-- 🔹 Password Security: Bcrypt
+A full-featured Learning Management System built with **FastAPI**, **React**, and **MongoDB**.
 
 ---
 
-## 📌 Project Overview
+## Tech Stack
 
-This LMS application provides:
-
-✔ User Registration (Student / Teacher)  
-✔ Secure Login Authentication  
-✔ JWT Token-Based Authorization  
-✔ Protected Routes  
-✔ MongoDB Database Integration  
-✔ CORS Enabled for Frontend-Backend Communication  
-
----
-
-## 🏗️ Project Architecture
-
-```
-React (Frontend)
-      ↓
-Axios API Calls
-      ↓
-Flask REST API
-      ↓
-MongoDB Database
-```
+| Layer | Technology |
+|---|---|
+| Backend | FastAPI + Motor (async MongoDB) |
+| Frontend | React 18 + Vite + TailwindCSS |
+| Database | MongoDB (local via Compass or Atlas for cloud) |
+| Video Storage | Firebase Storage (signed URLs) |
+| Payments | Razorpay / Stripe |
+| Real-time | WebSockets (Socket.IO) |
+| Auth | JWT (access + refresh tokens) + OTP email verification |
 
 ---
 
-# ⚙️ Backend Setup (Flask API)
+## Features
 
-## 📁 Backend Structure
+### Student
+- Register/Login with OTP email verification, Google/GitHub social login
+- Browse, search, and filter courses with autocomplete
+- Enroll with promo codes and payment gateway
+- Secure video streaming (signed Firebase URLs, non-downloadable player)
+- Raise doubts (public/private tickets), receive notifications when resolved
+- Take tests/assignments, view results and leaderboard
+- Track watch hours and course progress
+- Follow teachers, receive content notifications
+- Download certificates (PDF) on course completion
+- Dedicated progress dashboard with charts
+
+### Teacher
+- Upload courses with metadata, tags, thumbnail
+- Upload videos via Firebase Storage (chunked, progress bar)
+- Upload course materials (PDFs, docs)
+- Manage student doubts with ticket tracking (open → in_progress → resolved)
+- Create tests with MCQ, short-answer, true/false questions
+- Schedule and host live sessions
+- View per-course analytics (views, students, revenue)
+- Earnings dashboard with transaction history and payout tracking
+- Customizable certificate templates
+- Offer/promo code suggestions based on trending topics
+
+### Admin
+- User management (activate/deactivate/delete)
+- Platform revenue dashboard
+- Content moderation
+- Promo code management
+- Payout processing
+
+---
+
+## Project Structure
 
 ```
-backend/
-│── app.py
-│── config.py
-│── .env
-│── requirements.txt
+lms/
+├── backend/
+│   ├── main.py                 # FastAPI app + middleware + routing
+│   ├── config.py               # Settings (pydantic-settings)
+│   ├── database.py             # MongoDB connection + indexes
+│   ├── schemas/schemas.py      # All Pydantic models
+│   ├── routes/
+│   │   ├── auth.py             # Register, login, OTP, social, refresh
+│   │   ├── courses.py          # CRUD, search, trending, recommendations
+│   │   ├── videos.py           # Firebase upload, stream URL, progress
+│   │   ├── doubts.py           # Ticket system with replies and status
+│   │   ├── tests.py            # Create tests, submit, grade, leaderboard
+│   │   ├── payments.py         # Razorpay/Stripe initiate + verify
+│   │   ├── users.py            # Profile, notifications, reviews, follows, certs, live
+│   │   └── websocket_admin.py  # WebSocket for real-time + admin panel
+│   ├── middleware/
+│   │   └── dependencies.py     # JWT auth dependency
+│   └── utils/
+│       ├── auth_utils.py       # JWT, bcrypt, OTP
+│       ├── email_utils.py      # SMTP email sender
+│       ├── firebase_utils.py   # Firebase admin + signed URLs
+│       └── certificate_utils.py# PDF certificate generation
+│
+└── frontend/
+    ├── src/
+    │   ├── App.jsx             # Routes (public, student, teacher, admin)
+    │   ├── context/AuthContext.jsx   # Auth state + login/logout
+    │   ├── utils/api.js        # Axios client + all API calls
+    │   ├── components/
+    │   │   ├── layout/Layout.jsx     # Nav + notification bell
+    │   │   ├── layout/AuthLayout.jsx
+    │   │   └── common/CourseCard.jsx
+    │   └── pages/
+    │       ├── Home.jsx              # Hero, trending, recommendations
+    │       ├── CourseDetail.jsx      # Course page + enrollment + payment
+    │       ├── SearchResults.jsx     # Full-text search + filters
+    │       ├── TeacherProfile.jsx    # Public teacher page + follow
+    │       ├── auth/                 # Login, Register, OTP, ForgotPassword
+    │       ├── student/              # Dashboard, VideoPlayer, Doubts, Progress, Certs, Tests
+    │       ├── teacher/              # Dashboard, Courses, Upload, Doubts, Tests, Earnings, Live
+    │       └── admin/                # Dashboard, Users
 ```
 
-## 🔧 Installation Steps
+---
 
-### 1️⃣ Create Virtual Environment
-```
-python -m venv venv
-```
+## Getting Started
 
-### 2️⃣ Activate Virtual Environment
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- MongoDB Compass (local) or MongoDB Atlas (cloud)
+- Firebase project (for video storage)
 
-Windows:
-```
-venv\Scripts\activate
-```
+### 1. Backend Setup
 
-Mac/Linux:
-```
-source venv/bin/activate
-```
+```bash
+cd backend
+cp .env.example .env
+# Edit .env with your credentials
 
-### 3️⃣ Install Dependencies
-```
 pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-If requirements.txt not created:
-```
-pip install flask flask-pymongo flask-bcrypt flask-jwt-extended flask-cors python-dotenv
-```
+API docs: http://localhost:8000/docs
 
----
+### 2. Frontend Setup
 
-## 🔐 Environment Variables (.env)
+```bash
+cd frontend
+cp .env.example .env
+# Edit .env with your Firebase and API keys
 
-Create a `.env` file:
-
-```
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET_KEY=your_secret_key
-```
-
----
-
-## ▶️ Run Backend Server
-
-```
-python app.py
-```
-
-Server runs on:
-```
-http://127.0.0.1:5000
-```
-
----
-
-# 🌐 API Endpoints
-
-## 🔹 Register
-POST `/api/register`
-
-Request Body:
-```
-{
-  "name": "Ravi",
-  "email": "ravi@gmail.com",
-  "password": "123456",
-  "role": "student"
-}
-```
-
-Response:
-```
-User registered successfully
-```
-
----
-
-## 🔹 Login
-POST `/api/login`
-
-Request Body:
-```
-{
-  "email": "ravi@gmail.com",
-  "password": "123456"
-}
-```
-
-Response:
-```
-{
-  "access_token": "JWT_TOKEN"
-}
-```
-
----
-
-## 🔹 Protected Route
-GET `/api/profile`
-
-Header:
-```
-Authorization: Bearer JWT_TOKEN
-```
-
-Response:
-```
-Welcome user_email
-```
-
----
-
-# 💻 Frontend Setup (React + Vite)
-
-## 📁 Frontend Structure
-
-```
-frontend/
-│── src/
-│    ├── Login.jsx
-│    ├── Register.jsx
-│    ├── authService.js
-│── package.json
-```
-
----
-
-## 🔧 Install Dependencies
-
-```
 npm install
-```
-
----
-
-## ▶️ Run Frontend
-
-```
 npm run dev
 ```
 
-Frontend runs on:
+App: http://localhost:5173
+
+### 3. MongoDB Compass
+- Connect to `mongodb://localhost:27017`
+- Database `lms_db` is auto-created on first run
+- Indexes are created automatically on startup
+
+---
+
+## Scaling to Cloud
+
+### MongoDB → Atlas
 ```
-http://localhost:5173
+MONGODB_URL=mongodb+srv://<user>:<pass>@cluster.xxxxx.mongodb.net/lms_db
 ```
 
----
+### Video Storage → Firebase
+1. Create Firebase project
+2. Enable Firebase Storage
+3. Download service account JSON → set `FIREBASE_CREDENTIALS_PATH`
+4. Set `FIREBASE_STORAGE_BUCKET`
 
-# 🔐 Authentication Flow
-
-1️⃣ User registers → Password hashed using Bcrypt  
-2️⃣ User logs in → Backend verifies credentials  
-3️⃣ JWT token generated  
-4️⃣ Frontend stores token  
-5️⃣ Protected routes validate token  
-
----
-
-# 🔒 Security Features
-
-- Password hashing (Bcrypt)
-- JWT Token authentication
-- CORS enabled
-- Environment-based configuration
-- Secure MongoDB connection
+### Deployment
+- **Backend**: Deploy to Railway, Render, or EC2 (Dockerfile provided)
+- **Frontend**: Deploy to Vercel (`npm run build`)
+- **WebSockets**: Ensure sticky sessions or use Redis adapter
 
 ---
 
-# 🚀 Future Improvements
+## API Endpoints Summary
 
-- Role-based dashboard (Student / Teacher)
-- Course creation module
-- Video streaming integration
-- Payment gateway
-- Admin control panel
-- Forgot password / Reset password
-- Email verification
-- Production deployment (AWS / Render / Railway)
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/auth/register` | Register user |
+| POST | `/api/v1/auth/login` | Login |
+| POST | `/api/v1/auth/verify-otp` | Verify email OTP |
+| GET | `/api/v1/courses/search` | Search courses |
+| GET | `/api/v1/courses/trending` | Trending courses |
+| POST | `/api/v1/videos/upload-url` | Get Firebase upload URL |
+| GET | `/api/v1/videos/{id}/stream-url` | Get signed stream URL |
+| POST | `/api/v1/doubts` | Create doubt ticket |
+| POST | `/api/v1/doubts/{id}/reply` | Reply to doubt |
+| POST | `/api/v1/tests/{id}/submit` | Submit test |
+| POST | `/api/v1/payments/initiate` | Start payment |
+| GET | `/api/v1/certificates/course/{id}` | Download certificate PDF |
+| WS | `/ws/{user_id}` | Real-time notifications |
 
----
-
-# 📊 Tech Stack Summary
-
-| Layer        | Technology |
-|-------------|------------|
-| Frontend    | React + Vite |
-| Backend     | Flask |
-| Database    | MongoDB |
-| Auth        | JWT |
-| Security    | Bcrypt |
-| API Client  | Axios |
-
----
-
-# 👨‍💻 Developer Notes
-
-- Debug mode enabled (for development only)
-- Do NOT use debug=True in production
-- Always store JWT secret securely
-- Use HTTPS in production
-- Use proper MongoDB Atlas IP whitelist
-
----
-
-# 📜 License
-
-This project is for educational and R&D purposes.
-
----
-
-# ✨ Author
-
-Ravi  
-IT – R&D Project (LMS Development)
-
----
-
-# 🎯 Status
-
-✔ Authentication Completed  
-✔ Backend API Working  
-✔ Frontend Login & Register Working  
-🚧 Home Page Under Development  
-🚧 Course Module Pending  
-
----
+Full interactive docs at `/docs` (Swagger UI).
